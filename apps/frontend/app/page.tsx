@@ -1,10 +1,14 @@
-import Chat from "./[components]/Chat";
-
+import RsaEncryptionTool from "@/components/rsa-encryption-tool";
+import ProtectedRoute from "../hooks/ProtectedRoute";
 
 export default function Home() {
   return (
-    <div >
-<Chat></Chat>
-    </div>
+    <ProtectedRoute>
+
+    <main className="container mx-auto p-4 max-w-4xl">
+    <h1 className="text-2xl font-bold mb-6">RSA Encryption / Decryption Tool</h1>
+    <RsaEncryptionTool />
+  </main>
+    </ProtectedRoute>
   );
 }

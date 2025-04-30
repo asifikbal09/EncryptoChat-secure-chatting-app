@@ -48,7 +48,7 @@ const loginUserFormDB = (payload) => __awaiter(void 0, void 0, void 0, function*
             id: user._id,
             name: user.name,
             email: user.email,
-            publicKey: user.publicKey,
+            privateKey: user.privateKey,
         },
     };
 });

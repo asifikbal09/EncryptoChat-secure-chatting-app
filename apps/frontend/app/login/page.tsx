@@ -2,10 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ email: "", password: "", privateKey: "" });
+  const [form, setForm] = useState({ email: "", password: "" });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -15,6 +21,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
+      const toastID = toast.loading("Loading")
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/api/auth/login`,
         {
@@ -28,52 +35,63 @@ export default function LoginPage() {
       );
 
       const data = await res.json();
-      console.log(data)
 
       if (res.ok && data.data.token) {
         localStorage.setItem("token", data.data.token);
         localStorage.setItem("private_key", data.data.user?.privateKey);
-
-        router.push("/chat"); // or dashboard page
+        toast.success("Login successful!",{id:toastID});
+        router.push("/chat");
       } else {
-        alert(data.message || "Login failed");
+        toast.error(data.message || "Login failed");
       }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      console.error(err);
-      alert("Something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white p-6 rounded-lg shadow-md w-full max-w-md space-y-4"
-      >
-        <h2 className="text-2xl font-bold text-center">Login</h2>
-
-        <input
-          name="email"
-          onChange={handleChange}
-          value={form.email}
-          placeholder="email"
-          className="input input-bordered w-full"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          onChange={handleChange}
-          value={form.password}
-          placeholder="Password"
-          className="input input-bordered w-full"
-          required
-        />
-
-        <button type="submit" className="btn btn-primary w-full">
-          Login
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <h2 className="text-2xl font-bold text-center">Login</h2>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <div>
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                required
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Login
+            </Button>
+            <p className="text-sm text-center text-gray-600">
+              Don’t have an account?{" "}
+              <Link href="/register" className="text-blue-600 hover:underline">
+                Register
+              </Link>
+            </p>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
