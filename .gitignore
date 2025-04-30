@@ -3,7 +3,6 @@ node_modules/
 apps/**/node_modules/
 
 # Build folders
-apps/**/dist
 apps/**/build
 
 # Environment files

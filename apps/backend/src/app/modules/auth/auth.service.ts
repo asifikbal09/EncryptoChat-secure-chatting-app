@@ -38,7 +38,7 @@ export const loginUserFormDB = async (payload:{email:string,password:string}) =>
       id: user._id,
       name: user.name,
       email: user.email,
-      publicKey: user.publicKey,
+      privateKey: user.privateKey,
     },
   };
 };
