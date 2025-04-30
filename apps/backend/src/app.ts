@@ -1,11 +1,26 @@
-import { Application, Request, Response } from "express"
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import sendResponse from './app/utils/sendResponse';
+import httpStatus from 'http-status';
+import router from './app/router';
 
-const express = require('express')
-const app:Application = express()
 
+const app: Application = express();
 
-app.get('/', (req:Request, res:Response) => {
-  res.send('Hello World!')
-})
+app.use(express.json());
+app.use(cors());
 
-export default app
+app.use("/api",router)
+
+app.get('/', (req: Request, res: Response) => {
+  sendResponse(res,{
+    statusCode:httpStatus.OK,
+    success:true,
+    message:"Hello world."
+  })
+});
+
+app.use(globalErrorHandler);
+
+export default app;

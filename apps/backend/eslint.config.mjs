@@ -13,9 +13,11 @@ export default [
   ...tseslint.configs.recommended,
   {
     rules: {
-      eqeqeq: "off",
-      "no-unused-vars": "error",
-      "prefer-const": ["error", { ignoreReadBeforeAssign: true }],
+      'no-unused-vars': 'error',
+      'no-unused-expressions': 'error',
+      'no-console': 'warn',
+      'prefer-const': 'error',
+      'no-undef': 'error',
     },
   },
   {
